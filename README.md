@@ -7,8 +7,9 @@ Dependencies
 ------------
 
 * [csound](http://www.csounds.com/)
-* [nose](http://somethingaboutorange.com/mrl/projects/nose/0.11.2/) (for tests)
+* [graphviz](http://www.graphviz.org/)
 * [simplejson](http://code.google.com/p/simplejson/)
+* [nose](http://somethingaboutorange.com/mrl/projects/nose/0.11.2/) (for tests)
 
 Testing
 -------

@@ -1,17 +1,16 @@
 import sys
 sys.path.append("/home/raf/sound-evolution")
+from Tkinter import Button, BOTH, Frame, Tk
 
-from Tkinter import *
 import sound_evolution as se
-import os, sys
 
 root = Tk()
-f = Frame(root, width = 300, height = 100)
+f = Frame(root, width=300, height=100)
 f.pack_propagate(0)
 f.pack()
 
-def callback():
 
+def callback():
     i = se.instrument.Instrument.random(const_prob=0.7, max_children=4)
     csd = se.csound_adapter.CSD()
     csd.orchestra(i)

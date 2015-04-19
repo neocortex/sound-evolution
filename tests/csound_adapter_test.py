@@ -1,7 +1,9 @@
-import os, re
+import re
+import os
 import nose.tools
 
 import sound_evolution as se
+
 
 def setUp():
     global csd, aif_filename, tone_json
@@ -13,8 +15,9 @@ def setUp():
     csd.orchestra(se.instrument.Instrument(tone_json))
     csd.score('i 1 0 2')
 
+
 def test_play():
-    """Should play an instrument to sound card."""
+    """ Should play an instrument to sound card. """
     global csd
     csd.play()
     assert re.search("PortAudio: selected output device",
@@ -24,8 +27,9 @@ def test_play():
     assert os.path.exists(csd.output_csd_filename)
     assert os.path.getsize(csd.output_csd_filename) > 0
 
+
 def test_render_aif():
-    """Should render aif sound file."""
+    """ Should render aif sound file. """
     global csd, aif_filename
     csd.output_aif(aif_filename)
     assert re.search("\d+-byte soundblks of shorts written to %s" % aif_filename,
@@ -33,8 +37,9 @@ def test_render_aif():
     assert os.path.exists(aif_filename)
     assert os.path.getsize(aif_filename) > 0
 
+
 def test_clean_tmp_files():
-    """Should clean up temp files."""
+    """ Should clean up temp files. """
     global aif_filename, tone_json
     # This test uses its own instance of CSD since other tests would
     # fail without the object.
@@ -47,9 +52,10 @@ def test_clean_tmp_files():
     assert not os.path.exists(aif_filename)
     assert not os.path.exists(csd_filename)
 
+
 @nose.tools.raises(OSError)
 def test_fail_without_csound():
-    """Should fail without csound binary"""
+    """ Should fail without csound binary. """
     global csd
     csd.csound_binary = "/this/path/for/sure/does/not/exists/csound"
     csd.play()

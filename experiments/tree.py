@@ -1,18 +1,14 @@
+# Simple example with only oscilators and math
 
-# simple example with only oscilators and math
-
-import simplejson as json
-import random
 from collections import deque
-
+import random
+import simplejson as json
 
 
 # some parameters of the tree
 max_sons = 5
 constant_prob = 0.7
 max_rand_const = 100
-
-
 
 # create tree function.
 # -start from the root
@@ -21,12 +17,11 @@ max_rand_const = 100
 # if max_modules not reached
 # => modules
 # => else constant
-#==> iterate over subtrees
+# ==> iterate over subtrees
 
 # as long as
 # -max number of modules not reached
 # -
-
 
 # what we need to describe the opcodes
 # -amount of necessary paremeters
@@ -34,23 +29,21 @@ max_rand_const = 100
 
 # addition and multiplication can always be used
 
+
 class Tree:
-    """a class for representing the genome tree"""
+    """ A class for representing the genome tree """
 
     def __init__(self, code):
-        """Constructor
-            code describes an opcode
+        """ Constructor
+            Code describes an opcode
         """
         self.code = code
         self.sons = []
 
 
 def get_only_type(the_type, opcodes):
-    """get only opcodes the have output of the_type"""
+    """ Get only opcodes the have output of the_type. """
     return [op for op in opcodes if op["outtype"] == the_type]
-
-
-
 
 
 if __name__ == '__main__':
@@ -60,7 +53,7 @@ if __name__ == '__main__':
 
     # select random root element
     # TODO maybe this has to be constrained to outtype="a" type
-    root            = Tree(random.choice(opcodes))
+    root = Tree(random.choice(opcodes))
 
     todo = deque([root])
 
@@ -78,7 +71,8 @@ if __name__ == '__main__':
                     tmp_tree.sons.append(random_opcode)
                     todo.append(random_opcode)
                 else:
-                    bla = {"name": "const", "value": random.random() * max_rand_const}
+                    bla = {"name": "const", "value":
+                           random.random() * max_rand_const}
                     root.sons.append(Tree(bla))
         else:
             for param in tmp_tree.code["params"]:
@@ -88,18 +82,6 @@ if __name__ == '__main__':
                     tmp_tree.sons.append(random_opcode)
                     todo.append(random_opcode)
                 else:
-                    bla = {"name": "const", "value": random.random() * max_rand_const}
+                    bla = {"name": "const", "value":
+                           random.random() * max_rand_const}
                     root.sons.append(Tree(bla))
-
-
-    # tree to code
-
-
-
-
-
-
-
-
-
-

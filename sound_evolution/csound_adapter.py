@@ -1,10 +1,13 @@
-"""Module that generates csound csd files and calls csound to create
-audio files and play in real-time.
+""" Module that generates csound csd files and calls csound to create audio
+    files and play in real-time.
 
 """
 
 import subprocess as sp
-import string, sys, os
+import os
+import string
+import sys
+
 
 class CSD(object):
     """This class represents a csd file for csound."""
@@ -19,7 +22,7 @@ class CSD(object):
 
     def __del__(self):
         for f in (self.output_csd_filename, self.output_filename):
-            if not f is None and os.path.exists(f):
+            if f is not None and os.path.exists(f):
                 os.unlink(f)
 
     def orchestra(self, *args):
@@ -44,34 +47,35 @@ class CSD(object):
         return '\n<%s>\n%s\n</%s>\n' % (tag_name, s, tag_name)
 
     def __run_csound(self, output="soundcard", **keywords):
-        """Generate a csd file and run csound binary.
+        """ Generate a csd file and run csound binary.
 
         Keyword arguments:
         output -- output mode can be "soundcard" (default) or "aif"
-        output_filename -- where to write aif file (defaults to "csd_filename.aif")
+        output_filename -- where to write aif file (default="csd_filename.aif")
 
         """
         if output == "soundcard":
-            self.__options = '-+rtaudio=portaudio -iadc -odac --env:CSNOSTOP=yes -d'
+            self.__options = '-+rtaudio=portaudio -iadc -odac'\
+                             '--env:CSNOSTOP=yes -d'
         elif output == "aif":
             self.output_filename = ""
             if "output_filename" in keywords:
                 self.output_filename = keywords['output_filename']
             else:
                 if self.output_csd_filename.endswith('.csd'):
-                    self.output_filename = self.output_csd_filename[:-4] + '.aif'
+                    self.output_filename = self.output_csd_filename[:-4]+'.aif'
                 else:
                     self.output_filename = self.output_csd_filename + '.aif'
             self.__options = '-A -d -o ' + self.output_filename
         else:
-            raise ValueError("Argument 'output' must be either 'soundcard' or 'aif'")
+            raise ValueError(
+                "Argument 'output' must be either 'soundcard' or 'aif'")
         fp = open(self.output_csd_filename, 'w')
         fp.write('; CSD file created from %s\n' % (sys.argv[0]))
-        fp.write(self.tagify(
-                'CsoundSynthesizer',
-                self.tagify('CsOptions', self.__options) +
-                self.tagify('CsInstruments', self.orchestra_definition()) +
-                self.tagify('CsScore', self.score_definition()), 0))
+        fp.write(self.tagify('CsoundSynthesizer',
+                 self.tagify('CsOptions', self.__options) +
+                 self.tagify('CsInstruments', self.orchestra_definition()) +
+                 self.tagify('CsScore', self.score_definition()), 0))
         fp.close()
         args = [self.csound_binary, self.output_csd_filename]
         p = sp.Popen(args, stdout=sp.PIPE, stderr=sp.PIPE)
@@ -80,7 +84,7 @@ class CSD(object):
             raise OSError("Csound execution failed!")
 
     def play(self):
-        """Play a csd object to an audio device using csound."""
+        """ Play a csd object to an audio device using csound. """
         self.__run_csound()
 
     def output_aif(self, *args):
